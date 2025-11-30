@@ -1,26 +1,196 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  font-family: var(--font-raleway), system-ui, sans-serif;;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Base font family and weights still controlled by CSS variables */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 15px; /* Mobile base: 1rem = 15px */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: inherit;
+  font-size: 1rem; /* 15px body text on mobile */
+  line-height: var(--line-height-normal);
+  font-weight: var(--weight-regular);
+
+  /* Use variables instead of fixed colors */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Optional: make nav/main also use surfaces */
+nav {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+main {
+  min-height: 100vh;
+}
+
+/* 🌓 Dark mode: automatically used when OS/browser is set to dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #020617;          /* very dark background */
+    --color-surface: #020617;     /* or #0b1120 for slightly lighter surface */
+    --color-border: #1f2933;
+    --color-text: #e5e7eb;
+    --color-text-muted: #9ca3af;
+    --color-accent: #60a5fa;
+  }
+
+  html {
+    /* Hint to the browser: use dark UI for scrollbars, form controls, etc. */
+    color-scheme: dark;
+  }
+}
+
+/* Optional: explicitly declare light mode as well */
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: light;
+  }
+}
+
+
+/* ---------------- Headings Mobile Base ---------------- */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.5em;
+  font-weight: var(--weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+/* Mobile sizes (small screen defaults) */
+h1 { font-size: 2rem; font-weight: var(--weight-extrabold); } /* 30px */
+h2 { font-size: 1.75rem; } /* 26px */
+h3 { font-size: 1.5rem; } /* 23px */
+h4 { font-size: 1.25rem; } /* 19px */
+h5 { font-size: 1.125rem; } /* 17px */
+h6 { font-size: 1rem; } /* 15px */
+
+/* ---------------- Responsive Scale (≥ 640px) ---------------- */
+
+@media (min-width: 640px) {
+  html {
+    font-size: 16px; /* Desktop base */
+  }
+
+  h1 { font-size: 2.5rem; } /* 40px */
+  h2 { font-size: 2rem; }   /* 32px */
+  h3 { font-size: 1.75rem; } /* 28px */
+  h4 { font-size: 1.5rem; } /* 24px */
+  h5 { font-size: 1.25rem; } /* 20px */
+  h6 { font-size: 1.125rem; } /* 18px */
+}
+
+/* ---------------- Body Text Utilities ---------------- */
+
+.text-body {
+  font-size: 1rem;
+  line-height: var(--line-height-normal);
+}
+
+.text-body-small {
+  font-size: 0.875rem;
+  line-height: var(--line-height-relaxed);
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  line-height: var(--line-height-relaxed);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-strong {
+  font-weight: var(--weight-semibold);
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.nav {
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-weight: var(--weight-bold);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.nav-links a:hover {
+  color: var(--color-accent);
+}
+
+.nav-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-cta {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.nav-cta:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Optional: slightly different vibes per role */
+
+.nav--employee .nav-logo,
+.nav--employee .nav-cta {
+  color: #16a34a;
+}
+
+.nav--manager .nav-logo,
+.nav--manager .nav-cta {
+  color: #ea580c;
+}
+
+.nav--customer .nav-logo,
+.nav--customer .nav-cta {
+  color: #2563eb;
 }

@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String?   // stores Argon2id hash string
+  algo        String    @default("argon2id")
+  name        String?
+  role        Role      @default(USER)
+  provider    String?   // e.g. "google"
+  providerId  String?   // e.g. Google's subject ID
+  createdAt   DateTime  @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Customer {
+  id          Int        @id @default(autoincrement())
+  name        String
+  phoneNumber String?
+  email       String?     
+  createdAt   DateTime   @default(now())
+  properties  Property[]
+}
+
+model Property {
+  id             Int      @id @default(autoincrement())
+  address        String
+  sqftBuildings  Int?
+  sqftGrass      Int?
+  sqftPavement   Int?
+  sqftSidewalks  Int?
+  managedBushes  String?
+  managedTrees   String?
+  snowRemoval    Boolean  @default(false)
+  map            String?
+  seasonContract Boolean  @default(false)
+  contract       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+}
