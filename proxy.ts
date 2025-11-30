@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 
 const secret = process.env.JWT_SECRET!;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const session = request.cookies.get("session")?.value;
 
