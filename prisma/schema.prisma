@@ -19,14 +19,18 @@ model User {
   password    String?   // stores Argon2id hash string
   algo        String    @default("argon2id")
   name        String?
-  role        Role      @default(USER)
+  role        Role      @default(CUSTOMER)
   provider    String?   // e.g. "google"
   providerId  String?   // e.g. Google's subject ID
   createdAt   DateTime  @default(now())
 }
 
 enum Role {
-  USER
+  CUSTOMER
+  EMPLOYEE
+  NOVICE
+  DRUID
+  ARCHDRUID
   ADMIN
 }
 

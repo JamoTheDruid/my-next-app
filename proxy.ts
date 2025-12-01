@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import { db } from "@/lib/db";
+//import { db } from "@/lib/db";
 
 const secret = process.env.JWT_SECRET!;
 
@@ -28,14 +28,14 @@ export function proxy(request: NextRequest) {
         };
 
         // For protected route, allow access
-        if (pathname.startsWith("/dashboard") ) {
+        if (pathname.startsWith("/protected") ) {
             return NextResponse.next();
         }
 
         // Admin-only route
         if (pathname.startsWith("/admin")) {
             if (role !== "ADMIN") {
-                return NextResponse.redirect(new URL("/dashboard", request.url));
+                return NextResponse.redirect(new URL(".", request.url));
             }
             return NextResponse.next();
         }
@@ -48,5 +48,5 @@ export function proxy(request: NextRequest) {
 
 // Middleware applies only to routes matched here:
 export const config = {
-    matcher: ["/dashboard/:path*", "/admin/:path*"],
+    matcher: ["/protected/:path*", "/admin/:path*"],
 };

@@ -8,9 +8,12 @@ const globalForPrisma = globalThis as unknown as {
 globalForPrisma.prismaCount = (globalForPrisma.prismaCount ?? 0) + 1;
 console.log("Prisma instances:", globalForPrisma.prismaCount);
 
-export const db =
-  globalForPrisma.prisma ?? new PrismaClient({
+const db =
+  globalForPrisma.prisma ?? 
+  new PrismaClient({
     log: ["error", "warn"],
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+
+export default db;

@@ -1,13 +1,13 @@
 // lib/user.ts
 import jwt from "jsonwebtoken";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { cookies } from "next/headers";
 import type { User } from "@prisma/client";
 import { redirect } from "next/navigation";
 import type { Role } from "@prisma/client";
 
 interface SessionPayload {
-    userId: number;
+    id: number;
     iat: number;
     exp: number;
 }
@@ -24,7 +24,7 @@ export async function getCurrentUser(): Promise<User | null> {
         const decoded = jwt.verify(cookie.value, secret) as SessionPayload;
 
         const user = await db.user.findUnique({
-            where: { id: decoded.userId },
+            where: { id: decoded.id },
         });
         console.log("Current user:", user);
         return user

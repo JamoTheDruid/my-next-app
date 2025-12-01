@@ -43,11 +43,11 @@ function EmployeeNav() {
   );
 }
 
-function ManagerNav() {
+function ArchdruidNav() {
   return (
     <nav className="nav nav--manager">
       <div className="nav-inner">
-        <span className="nav-logo">Druidic · Admin</span>
+        <span className="nav-logo"><a href=".">Druidic · Admin</a></span>
         <ul className="nav-links">
           <li><a href="/overview">Overview</a></li>
           <li><a href="/teams">Teams</a></li>
@@ -55,7 +55,7 @@ function ManagerNav() {
           <li><a href="/settings">Settings</a></li>
         </ul>
         <div className="nav-meta">
-          <a href="/admin" className="nav-cta">Admin Panel</a>
+          <a href="/profile" className="nav-cta">Profile</a>
         </div>
       </div>
     </nav>
@@ -91,18 +91,18 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const role = await getCurrentUser();
+  const user = await getCurrentUser();
 
   let Nav: React.ReactNode;
-  switch (role) {
+  switch (user?.role) {
     case "USER":
       Nav = <CustomerNav />;
       break;
-    case "employee":
+    case "EMPLOYEE":
       Nav = <EmployeeNav />;
       break;
-    case "manager":
-      Nav = <ManagerNav />;
+    case "ADMIN":
+      Nav = <ArchdruidNav />;
       break;
     default:
       Nav = <GuestNav />;

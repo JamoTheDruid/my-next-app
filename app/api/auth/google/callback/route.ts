@@ -1,6 +1,6 @@
 // app/api/auth/google/callback/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import jwt from "jsonwebtoken";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -93,16 +93,42 @@ export async function GET(req: NextRequest) {
     }
 
     // 4. Create your usual JWT session cookie
-    const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: "7d" });
+    const token = jwt.sign(
+        { id: user.id, role: user.role }, 
+        jwtSecret, 
+        { expiresIn: "7d" });
 
-    const res = NextResponse.redirect(new URL("/dashboard", req.url));;
+
+    // Decide where to send the user based on their role
+    
+        const roleRedirects: Record<string, string> = {
+            CUSTOMER: "/dashboard",
+            EMPLOYEE: "/schedule",
+            NOVICE: "/schedule",
+            DRUID: "/schedule",
+            ARCHDRUID: "/overview",
+            ADMIN: "/overview",
+        }
+
+    // Fallback if the role doesn't match any keys
+    if (!roleRedirects) {
+        console.log("No redirect found for user role:", user.role);
+    }
+
+    const redirectTarget = roleRedirects[user.role] ?? "/login";
+
+    // Create the redirect response
+    const res = NextResponse.redirect(new URL(redirectTarget, req.url));
+
+    // Attach the session cookie to *this* response
     res.cookies.set("session", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7, // 7 days (optional but nice)
     });
 
-    // 5. Redirect to dashboard or wherever
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    // 5. Return the response with cookie + role-based redirect
+    return res;
 }

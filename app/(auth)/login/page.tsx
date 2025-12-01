@@ -1,6 +1,7 @@
 import { authenticateUser } from "@/lib/auth";
 import { createSessionToken } from "@/lib/session";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
     async function login(formData: FormData) {
@@ -35,6 +36,11 @@ export default function LoginPage() {
             <button type="submit">Log In</button>
 
             <hr style={{ margin: "1rem 0" }} />
+
+            <p style={{ marginTop: "1rem" }}>
+                Don&apos;t have an account?{" "}
+                <Link href="/register">Create one</Link>
+            </p>
             
             <a href="/api/auth/google" style={{ textAlign: "center", display: "block", padding: "0.5rem", backgroundColor: "#4285F4", color: "white", textDecoration: "none", borderRadius: 4 }}>
                 Log in with Google

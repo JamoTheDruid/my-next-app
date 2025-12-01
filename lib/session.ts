@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 //import { redirect } from "next/navigation";
 import type { Role } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 const secret = process.env.JWT_SECRET!;
 
@@ -24,6 +25,14 @@ export async function createSessionToken(user: { id: number; role: Role }) {
     });
 
     // return jwt.sign({ userId }, secret, { expiresIn: "7d" });
+}
+
+export async function logout() {
+        "use server";
+
+        const cookieStore = await cookies();
+        cookieStore.delete("session");
+        redirect("/.");
 }
 
 // Deprecated
