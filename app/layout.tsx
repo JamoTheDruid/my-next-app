@@ -4,8 +4,9 @@ import "./globals.css";
 import { raleway } from "./fonts";
 import React from "react";
 import { getCurrentUser } from "@/lib/user";
+import Link from "next/link";
 
-// 3. Role-specific nav components
+// Role-specific nav components
 
 function CustomerNav() {
   return (
@@ -13,9 +14,9 @@ function CustomerNav() {
       <div className="nav-inner">
         <span className="nav-logo">Druidic</span>
         <ul className="nav-links">
-          <li><a href="/dashboard">My Services</a></li>
-          <li><a href="/invoices">Invoices</a></li>
-          <li><a href="/support">Support</a></li>
+          <li><a href=".">My Services</a></li>
+          <li><a href=".">Invoices</a></li>
+          <li><a href=".">Support</a></li>
         </ul>
         <div className="nav-meta">
           <a href="/account" className="nav-cta">Account</a>
@@ -31,9 +32,9 @@ function EmployeeNav() {
       <div className="nav-inner">
         <span className="nav-logo">Druidic · Staff</span>
         <ul className="nav-links">
-          <li><a href="/jobs-today">Jobs Today</a></li>
-          <li><a href="/schedule">Schedule</a></li>
-          <li><a href="/customers">Customers</a></li>
+          <li><a href=".">Jobs Today</a></li>
+          <li><a href=".">Schedule</a></li>
+          <li><a href=".">Customers</a></li>
         </ul>
         <div className="nav-meta">
           <a href="/profile" className="nav-cta">Profile</a>
@@ -49,10 +50,10 @@ function ArchdruidNav() {
       <div className="nav-inner">
         <span className="nav-logo"><a href=".">Druidic · Admin</a></span>
         <ul className="nav-links">
-          <li><a href="/overview">Overview</a></li>
-          <li><a href="/teams">Teams</a></li>
-          <li><a href="/reports">Reports</a></li>
-          <li><a href="/settings">Settings</a></li>
+          <li><a href="/admin/overview">Overview</a></li>
+          <li><a href="/admin/teams">Teams</a></li>
+          <li><a href="/admin/reports">Reports</a></li>
+          <li><a href="/admin/settings">Settings</a></li>
         </ul>
         <div className="nav-meta">
           <a href="/profile" className="nav-cta">Profile</a>
@@ -66,10 +67,10 @@ function GuestNav() {
   return (
     <nav className="nav nav--guest">
       <div className="nav-inner">
-        <span className="nav-logo">Druidic</span>
+        <Link href="/">Druidic</Link>
         <ul className="nav-links">
-          <li><a href="/services">Services</a></li>
-          <li><a href="/about">About</a></li>
+          <li><Link href="/">Services</Link></li>
+          <li><Link href="/">About</Link></li>
         </ul>
         <div className="nav-meta">
           <a href="/login" className="nav-cta">Log in</a>
@@ -79,13 +80,45 @@ function GuestNav() {
   );
 }
 
-// 4. Metadata
+// Metadata
 export const metadata: Metadata = {
-  title: "Greatest App Ever Developed",
-  description: "One foot in front of the other",
+  title:  {
+    default: "Druidic Native Landscaping",
+    template: "%s · Druidic Native Landscaping",
+  },
+  description: "Professional native landscaping services to connect you with nature.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  openGraph: {
+    title: "Druidic Native Landscaping",
+    description: "Professional native landscaping services to connect you with nature.",
+    url: "https://www.druidic-llc.com",
+    siteName: "Druidic Native Landscaping",
+    /*images: [
+      {
+        url: "insert imape path here",
+        width: 1200,
+        height: 630,
+        alt: "Druidic Native Landscaping",
+      },
+    ],*/
+    //Later, if you want to go advanced, we can add 
+    //a dynamic openGraph.images with a generated OG image
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Druidic Native Landscaping",
+    description: "Professional native landscaping services to connect you with nature.",
+    //images: ["insert image path here"],
+  },
+  // Optional but nice:
+  metadataBase: new URL("https://www.druidic-llc.com"),
 };
 
-// 5. Root layout: async so we can await role resolution
+// Root layout: async so we can await role resolution
 export default async function RootLayout({
   children,
 }: {
@@ -95,7 +128,7 @@ export default async function RootLayout({
 
   let Nav: React.ReactNode;
   switch (user?.role) {
-    case "USER":
+    case "CUSTOMER":
       Nav = <CustomerNav />;
       break;
     case "EMPLOYEE":

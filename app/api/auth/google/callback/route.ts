@@ -102,12 +102,12 @@ export async function GET(req: NextRequest) {
     // Decide where to send the user based on their role
     
         const roleRedirects: Record<string, string> = {
-            CUSTOMER: "/dashboard",
-            EMPLOYEE: "/schedule",
-            NOVICE: "/schedule",
-            DRUID: "/schedule",
-            ARCHDRUID: "/overview",
-            ADMIN: "/overview",
+            CUSTOMER: "/customer",
+            EMPLOYEE: "/employee",
+            NOVICE: "",
+            DRUID: "",
+            ARCHDRUID: "/admin/overview",
+            ADMIN: "/admin/overview",
         }
 
     // Fallback if the role doesn't match any keys

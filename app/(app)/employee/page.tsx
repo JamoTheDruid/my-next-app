@@ -1,4 +1,4 @@
-// app/account/page.tsx
+// app/customer/account/page.tsx
 import { getCurrentUser } from "@/lib/user";
 import { logout } from "@/lib/session";
 

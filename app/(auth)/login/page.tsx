@@ -18,8 +18,14 @@ export default function LoginPage() {
         }
 
         await createSessionToken({ id: user.id, role: user.role });
-        
-        redirect("/dashboard");
+
+        const roleRedirects: Record<string, string> = {
+        CUSTOMER: "/customer",
+        EMPLOYEE: "/employee",
+        ADMIN: "/admin/overview",
+        };
+
+        redirect(roleRedirects[user.role] ?? "/");
     }
 
     return (
