@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const secret = process.env.JWT_SECRET!;
 
 export function proxy(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
+    /*const pathname = request.nextUrl.pathname;
     const session = request.cookies.get("session")?.value;
 
     // Paths that do not require auth:
@@ -23,8 +23,8 @@ export function proxy(request: NextRequest) {
 
     try {
         const { id, role } = jwt.verify(session, secret) as { 
-            id: number;
-            role: "ADMIN" | "ARCHDRUID" | "DRUID" | "NOVICE" | "EMPLOYEE" | "CUSTOMER";
+            id: string;
+            role: "ADMIN" | "MANAGER" | "EMPLOYEE" | "CUSTOMER" | "GUEST";
         };
 
         // Customer access settings
@@ -48,14 +48,15 @@ export function proxy(request: NextRequest) {
             }
             return NextResponse.next();
         }
-        
+        */
         return NextResponse.next();
-    }   catch {
-        return NextResponse.redirect(new URL("/", request.url));
-    }
+   // }   catch {
+        //return NextResponse.redirect(new URL("/", request.url));
+    //}
 }
-
+/*
 // Middleware applies only to routes matched here:
 export const config = {
     matcher: ["/protected/:path*", "/admin/:path*"],
 };
+*/

@@ -1,19 +1,43 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-  prismaCount: number | undefined;
-};
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+  // eslint-disable-next-line no-var
+  var prismaAdapter: PrismaPg | undefined;
+  // eslint-disable-next-line no-var
+  var prismaCount: number | undefined;
+}
 
-globalForPrisma.prismaCount = (globalForPrisma.prismaCount ?? 0) + 1;
-console.log("Prisma instances:", globalForPrisma.prismaCount);
+const connectionString = process.env.DATABASE_URL;
 
+if (!connectionString) {
+  throw new Error("DATABASE_URL is not set");
+}
+
+globalThis.prismaCount = (globalThis.prismaCount ?? 0) + 1;
+console.log("Prisma instances:", globalThis.prismaCount);
+
+// ✅ Adapter singleton
+const adapter =
+  globalThis.prismaAdapter ??
+  new PrismaPg({
+    connectionString,
+  });
+
+// ✅ Client singleton
 const db =
-  globalForPrisma.prisma ?? 
+  globalThis.prisma ??
   new PrismaClient({
+    adapter,
     log: ["error", "warn"],
   });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prismaAdapter = adapter;
+  globalThis.prisma = db;
+}
 
 export default db;

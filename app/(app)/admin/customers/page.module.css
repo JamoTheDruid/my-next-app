@@ -1,0 +1,70 @@
+.submit {
+  display: block;
+  width: 90%;
+  max-width: calc(var(--max-width-input) * .9);
+  padding: 14px 12px;
+  margin: .8rem auto;
+  background-color: color-mix(
+    in srgb,
+    var(--brand-purple) 20%,
+    transparent);
+  border-radius: 1rem;
+}
+
+.submit:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--brand-purple) 40%,
+    transparent);
+}
+
+.form {
+  display: grid;
+  gap: 1rem; /* 👈 controls spacing between fields */
+}
+
+/* New styles for customer list and links */
+
+.customerList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.customerLink {
+  display: block;
+  padding: 10px;
+  margin: 0 0;
+  background-color: color-mix(
+    in srgb,
+    var(--brand-olive-green) 10%,
+    transparent);
+  border-radius: 1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow:
+    0 0 0 1px color-mix(
+    in srgb,
+    var(--brand-purple) 60%,
+    transparent),
+    0 0 12px color-mix(
+    in srgb,
+    var(--brand-purple) 45%,
+    transparent);
+}
+
+.customerLink:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--brand-olive-green) 20%,
+    transparent);
+}
+
+/* Mobile Breakpoint */
+@media screen and (max-width: 768px) {
+  .customerList {
+    display: flex;
+    flex-direction: column; /* This is the magic line that stacks them */
+  }
+}

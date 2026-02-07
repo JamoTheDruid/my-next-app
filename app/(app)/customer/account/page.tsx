@@ -9,7 +9,7 @@ export default async function AccountPage() {
     <div style={{ padding: "1rem" }}>
         <h1>Account</h1>
         <p>Welcome, {user?.email}</p>
-        <p>Your role: {user?.role}</p>
+        <p>Your role: {user?.roleKeys}</p>
         <form action={logout}>
             <button type="submit">Log Out</button>
         </form>

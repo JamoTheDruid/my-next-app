@@ -5,7 +5,7 @@ import { logout } from "@/lib/session";
 export async function generateMetadata() {
   const user = await getCurrentUser();
   return {
-    title: `Profile · ${user?.name}`,
+    title: `Profile · ${user?.email}`,
     description: "Your profile overview and settings.",
   };
 }
@@ -16,8 +16,8 @@ export default async function ProfilePage() {
   return (
     <div style={{ padding: "1rem" }}>
         <h1>Overview</h1>
-        <p>Welcome, {user?.email}</p>
-        <p>Your role: {user?.role}</p>
+        <p>{user?.email}</p>
+        <p>{user?.roleKeys}</p>
         <form action={logout}>
             <button type="submit">Log Out</button>
         </form>

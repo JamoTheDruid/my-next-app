@@ -1,14 +1,13 @@
-// app/dashboard/page.tsx
+// app/(admin)/scratch-html/page.tsx
 import { getCurrentUser } from "@/lib/user";
+import styles from "@/app/page.module.css"
 
 export default async function ReportsPage() {
   const user = await getCurrentUser();
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h1>Reports</h1>
-      <p>Welcome, {user?.email}</p>
-      <p>Your role: {user?.role}</p>
+        <div>Reports</div>
     </div>
   );
 }

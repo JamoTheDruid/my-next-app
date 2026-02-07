@@ -2,31 +2,49 @@
 import { getCurrentUser } from "@/lib/user";
 import db from "@/lib/db";
 import { updateUserRole } from "./actions";
-import type { Role } from "@prisma/client";
-
-const ALL_ROLES: Role[] = [
-  "CUSTOMER",
-  "EMPLOYEE",
-  "NOVICE",
-  "DRUID",
-  "ARCHDRUID",
-  "ADMIN",
-];
+import type { RoleKey } from "@prisma/client";
+import styles from "./page.module.css"
 
 export default async function SettingsPage() {
-  const [users, currentUser] = await Promise.all([
+  const [user, currentUser] = await Promise.all([
     db.user.findMany({
         orderBy: { createdAt: "desc" },
+        include: {
+          roles: {
+            include: {
+              role: {
+                select: { key: true },
+              }
+            }
+          }
+        }
     }),
     getCurrentUser()
   ]);
+/*
+  Bonus: performance note (important)
+  If this page ever grows to:
+  -thousands of users
+  -lots of relations
+  -heavy UI logic
+  You’ll want:
+  -pagination
+  -role aggregation
+  -maybe role caching
+  But for now?
+  This is 100% the right call.
+*/
+
+
+
+  const ALL_ROLES: RoleKey[] = ["GUEST", "CUSTOMER", "EMPLOYEE", "MANAGER", "ADMIN"];
 
   return (
     <>
     <div style={{ padding: "1rem" }}>
       <h1>Settings</h1>
       <p>Welcome, {currentUser?.email}</p>
-      <p>Your role: {currentUser?.role}</p>
+      <p>Your role: {currentUser?.roleKeys}</p>
     </div>
 
     <div style={{ padding: "1rem" }}>
@@ -43,7 +61,7 @@ export default async function SettingsPage() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => {
+          {user.map((user) => {
             const isSelf = currentUser?.id === user.id;
 
             return (
@@ -55,7 +73,7 @@ export default async function SettingsPage() {
                   {user.email} {isSelf && <strong>(you)</strong>}
                 </td>
                 <td style={{ borderBottom: "1px solid #eee", padding: "0.5rem" }}>
-                  {user.role}
+                  {user.roles.map((r) => r.role.key).join(", ")}
                 </td>
                 <td style={{ borderBottom: "1px solid #eee", padding: "0.5rem" }}>
                   <form
@@ -65,13 +83,13 @@ export default async function SettingsPage() {
                     <input type="hidden" name="id" value={user.id} />
                     <select
                       name="role"
-                      defaultValue={user.role}
+                      defaultValue={user.roles.find(r => r.isPrimary)?.role.key}
                       // Optional: prevent changing your own role from here
                       disabled={isSelf}
                     >
-                      {ALL_ROLES.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
+                      {ALL_ROLES.map((roles: RoleKey) => (
+                        <option key={roles} value={roles}>
+                          {roles}
                         </option>
                       ))}
                     </select>

@@ -1,0 +1,112 @@
+.field {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    max-width: var(--max-width-input);
+    gap: .25rem;
+    padding: .5rem;
+    background-color: color-mix(
+      in srgb,
+      var(--brand-olive-green) 0%,
+      transparent);
+    border-radius: 1rem;
+    box-shadow:
+      0 0 0 1px color-mix(
+      in srgb,
+      var(--brand-olive-green) 0%,
+      transparent),
+      0 0 12px color-mix(
+      in srgb,
+      var(--brand-olive-green) 0%,
+      transparent);
+    text-decoration-line: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.282);
+    text-decoration-style: solid;
+    text-decoration-thickness: .15rem;
+    text-underline-offset: .5rem;
+    transition: background-color .3s ease,box-shadow .3s ease, border-color .3s ease, text-decoration-color .3s ease;
+}
+
+.field:hover {
+  text-decoration-color: rgba(0, 0, 0, 0.882);
+    /*background-color: color-mix(
+      in srgb,
+      var(--brand-olive-green) 20%,
+      transparent);
+    border-color: var(--brand-purple);
+    box-shadow:
+      0 0 0 1px color-mix(
+      in srgb,
+      var(--brand-purple) 50%,
+      transparent),
+      0 0 12px color-mix(
+      in srgb,
+      var(--brand-purple) 45%,
+      transparent);
+    text-decoration-color: linear-gradient(
+      to bottom,
+      var(--brand-purple),
+      var(--brand-olive-green));
+    border-bottom: 1px solid linear-gradient(
+      to bottom,
+      var(--brand-purple),
+      var(--brand-olive-green));*/
+}
+
+.fieldInput {
+  outline: none;
+  width: 100%;
+  display: block;
+  max-width: var(--max-width-input);
+  margin: auto;
+
+  /*
+    position: relative;
+    z-index: 2; /* Keeps input above the blur 
+    outline: none;*//*
+    background-color: color-mix(
+      in srgb,
+      var(--brand-olive-green) 20%,
+      transparent);
+    border-color: var(--brand-purple);
+    box-shadow:
+      0 0 0 1px color-mix(
+      in srgb,
+      var(--brand-purple) 50%,
+      transparent),
+      0 0 12px color-mix(
+      in srgb,
+      var(--brand-purple) 45%,
+      transparent);
+    text-decoration-color: rgba(0, 0, 0, 0);*/
+}
+
+.inputContainer input:focus {
+    text-decoration-line: underline;
+    text-decoration-color: var(--brand-purple);
+    text-decoration-style: solid;
+    text-decoration-thickness: .15rem;
+    text-underline-offset: .5rem;
+}
+/*
+.glowContainer {
+  position: relative;
+  display: inline-block;
+}
+
+/* The "Blur" Layer 
+.glowContainer::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  background: var(--brand-purple);
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show the blur when the input inside is focused 
+.glowContainer:focus-within::before {
+  opacity: 1;
+}*/

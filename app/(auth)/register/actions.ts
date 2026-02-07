@@ -2,7 +2,7 @@
 "use server";
 
 import { registerUser } from "@/lib/auth";
-import { createSessionToken } from "@/lib/session";
+import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 interface RegisterFormState {
@@ -26,9 +26,9 @@ export async function registerAction(
         };
     }
 
-    await createSessionToken({
+    await createSession({
         id: result.user.id,
-        role: result.user.role,
+        role: result.user.roleKeys,
     });
 
     redirect("/dashboard");

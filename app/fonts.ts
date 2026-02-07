@@ -14,3 +14,17 @@ export const raleway = localFont({
     style: "normal",
     display: "swap",
 });
+
+export const nunito = localFont({
+    src: [
+        {
+            path: "./fonts/Nunito_Sans/NunitoSans-VariableFont.ttf",
+            weight: "100 900",
+            style: "normal",
+        },
+    ],
+    variable: "--font-nunito",
+    weight: "100 900", // full supported range
+    style: "normal",
+    display: "swap",
+});
