@@ -17,3 +17,17 @@
   margin-right: auto;
   text-align: center;
 }
+
+.homeImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
+
+.dark { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  .light { display: none; }
+  .dark { display: block; }
+}

@@ -11,7 +11,23 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
     return (
-        <div>
+        <div className={styles.parent}>
+            <Image 
+                src="/Home_Candidate.jpg" 
+                alt="Monarch Butterfly Feeding from a Swamp Milkweed" 
+                className={styles.homeImage + " " + styles.light} 
+                fill
+                sizes="100vw"
+                priority
+            />
+            <Image 
+                src="/Home_Dark_C1.jpg" 
+                alt="Moon Garden" 
+                className={styles.homeImage + " " + styles.dark} 
+                fill
+                sizes="100vw"
+                priority
+            />
             <div className={styles.intro}>This website is in development...</div>
         </div>
     );
