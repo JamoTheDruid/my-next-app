@@ -1,0 +1,44 @@
+{
+"name":"Jane Doe"
+,"firstName":"Jane"
+,"lastName":"Doe"
+,"address":"123 Main Street"
+,"city":"Denver"
+,"stateProvince":"CO"
+,"postalCode":"80210"
+,"primaryPhone":"3031234567"
+,"phoneExt":"1234"
+,"secondaryPhone":"3037654321"
+,"secondaryPhoneExt":"5678"
+,"email":"janedoe@gmail.com"
+,"srOid":123456789
+,"leadOid":987654321
+,"fee":25.67
+,"taskName":"Moving Out-of-State"
+,"comments":"I am moving my family of 4 to a new state. We have a 3 bedroom house worth of stuff and looking for more information about your moving services."
+,"matchType":"Lead"
+,"leadDescription":"Standard"
+,"spEntityId":12345678
+,"spCompanyName":"Standard Company Name"
+,"contactStatus":"New Appt - Transferred"
+, "primaryPhoneDetails": {
+    "maskedNumber": false
+  }
+,"crmKey":"abcd-12345"
+,"leadSource":"HomeAdvisor"
+,"trustedFormUrl":"https://cert.trustedform.com/xxz1z51db5ed50eb17992be2686166f4fc87f11c"
+,"automatedContactCompliant":true
+,"automatedContactConsentId":"223e4567-e89b-12d3-a456-426614174333"
+,"interview":[
+{"question":"What type of moving help do you need?"
+,"answer":"Out of state"}
+,{"question":"When do you want the pro to begin work?"
+,"answer":"More than 2 weeks"}
+,{"question":"What zip code are you moving to?"
+,"answer":"84044"}
+,{"question":"What zip code are you moving from?"
+,"answer":"80210"}
+,{"question":"When is your moving date?"
+,"answer":"8/11/2024"}
+]
+}

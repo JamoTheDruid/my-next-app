@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
     return (
         <div>
-            <div className={styles.intro}>This website is in development...</div>
+            <div className={styles.intro}>This website is still in development...</div>
         </div>
     );
 }

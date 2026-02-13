@@ -17,3 +17,14 @@
   margin-right: auto;
   text-align: center;
 }
+
+.cell {
+  border: 1px solid #eee;
+  padding: 0.5rem;
+}
+
+
+.row {
+  border: 1px solid #eee;
+  padding: 0.5rem;
+}

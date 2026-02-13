@@ -220,3 +220,52 @@ model Account {
   updatedAt   DateTime  @updatedAt
 }
 
+model AngiLead {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // basic info
+  name          String
+  firstName      String
+  lastName       String
+  email          String
+  address        String
+  city           String
+  stateProvince  String
+  postalCode     String
+
+  // phones
+  primaryPhone        String
+  phoneExt            String?
+  secondaryPhone      String?
+  secondaryPhoneExt   String?
+  primaryMaskedNumber Boolean @default(false)
+
+  // angi identifiers / metadata
+  srOid        BigInt
+  leadOid      BigInt @unique
+  fee          Decimal
+  taskName     String
+  comments     String
+  matchType    String
+  leadDescription String
+  spEntityId   BigInt
+  spCompanyName String
+  contactStatus String
+  crmKey       String?
+  leadSource   String
+  trustedFormUrl String?
+  automatedContactCompliant Boolean
+  automatedContactConsentId String?
+
+  interview AngiInterviewEntry[]
+}
+
+model AngiInterviewEntry {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      AngiLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  question  String
+  answer    String
+}
