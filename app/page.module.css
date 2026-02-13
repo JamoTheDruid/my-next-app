@@ -18,6 +18,7 @@
   text-align: center;
 }
 
+
 .cell {
   border: 1px solid #eee;
   padding: 0.5rem;
@@ -27,4 +28,17 @@
 .row {
   border: 1px solid #eee;
   padding: 0.5rem;
+
+.homeImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
+
+.dark { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  .light { display: none; }
+  .dark { display: block; }
 }

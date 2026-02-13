@@ -1,3 +1,4 @@
+// lib/db.ts
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -6,27 +7,20 @@ declare global {
   var prisma: PrismaClient | undefined;
   // eslint-disable-next-line no-var
   var prismaAdapter: PrismaPg | undefined;
-  // eslint-disable-next-line no-var
-  var prismaCount: number | undefined;
 }
 
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  throw new Error("DATABASE_URL is not set");
+function getConnectionString() {
+  const cs = process.env.DATABASE_URL;
+  if (!cs) throw new Error("DATABASE_URL is not set");
+  return cs;
 }
 
-globalThis.prismaCount = (globalThis.prismaCount ?? 0) + 1;
-console.log("Prisma instances:", globalThis.prismaCount);
+const isProd = process.env.NODE_ENV === "production";
 
-// ✅ Adapter singleton
 const adapter =
   globalThis.prismaAdapter ??
-  new PrismaPg({
-    connectionString,
-  });
+  new PrismaPg({ connectionString: getConnectionString() });
 
-// ✅ Client singleton
 const db =
   globalThis.prisma ??
   new PrismaClient({
@@ -34,7 +28,7 @@ const db =
     log: ["error", "warn"],
   });
 
-if (process.env.NODE_ENV !== "production") {
+if (!isProd) {
   globalThis.prismaAdapter = adapter;
   globalThis.prisma = db;
 }
