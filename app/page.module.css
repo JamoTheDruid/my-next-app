@@ -28,6 +28,7 @@
 .row {
   border: 1px solid #eee;
   padding: 0.5rem;
+}
 
 .homeImage {
   position: absolute;
@@ -36,7 +37,10 @@
   object-fit: cover;
 }
 
-.dark { display: none; }
+@media (prefers-color-scheme: light) {
+  .light { display: block; }
+  .dark { display: none; }
+}
 
 @media (prefers-color-scheme: dark) {
   .light { display: none; }
