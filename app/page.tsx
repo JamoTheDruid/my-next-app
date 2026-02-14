@@ -31,7 +31,7 @@ export default function HomePage() {
                 priority
             />
 
-            <div className={`${styles.homeContainer}`}>
+            <div className={styles.homeContainer}>
                 <div className={`liquidGlass newCard`}>
                     <div className={styles.subtitle}>Why Native Landscapes?</div>
                     <div className={styles.title}>Healthier environments that cost less to maintain</div>

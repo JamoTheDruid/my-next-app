@@ -48,22 +48,24 @@ export const metadata: Metadata = {
 function NavLogo() {
   return (
 
-    <div>
+    <div className={styles.logoContainer}>
       <Link href="/" className={styles.dark}>
         <Image
-          src="/Dark_Mode_Logo.png"
+          src="/Horizontal_Dark_Mode_Logo.png"
           alt="Druidic Native Landscaping"
-          width={130}
-          height={52}
+          fill
+          /*width={130}
+          height={52}*/
           priority
         />
       </Link>
       <Link href="/" className={styles.light}>
         <Image
-          src="/Light_Mode_Logo.png"
+          src="/Horizontal_Light_Mode_Logo.png"
           alt="Druidic Native Landscaping"
-          width={130}
-          height={52}
+          fill
+          /*width={130}
+          height={52}*/
           priority
         />
       </Link>
