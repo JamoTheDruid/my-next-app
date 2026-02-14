@@ -1,0 +1,88 @@
+/* components/BalanceSheetCard.module.css */
+
+.cardLink {
+  display: block;
+  border-radius: 1rem; /* 16px */
+  border: 1px solid rgb(229 229 229); /* neutral-200 */
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  text-decoration: none;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.cardLink:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.cardLink:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(163 163 163); /* neutral-400 */
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(82 82 82); /* neutral-600 */
+}
+
+.netWorthValue {
+  margin-top: 0.25rem;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgb(23 23 23); /* neutral-900 */
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: rgb(115 115 115); /* neutral-500 */
+}
+
+.badge {
+  border-radius: 9999px;
+  background: rgb(245 245 245); /* neutral-100 */
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: rgb(82 82 82); /* neutral-600 */
+  white-space: nowrap;
+}
+
+.metricsGrid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metric {
+  border-radius: 0.75rem;
+  background: rgb(250 250 250); /* neutral-50 */
+  padding: 0.75rem;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(82 82 82); /* neutral-600 */
+}
+
+.metricValue {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(23 23 23); /* neutral-900 */
+}
+
+.footerHint {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: rgb(115 115 115); /* neutral-500 */
+}

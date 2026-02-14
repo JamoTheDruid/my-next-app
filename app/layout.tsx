@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import styles from "./page.module.css";
 import { raleway, nunito } from "./fonts";
 import React from "react";
 import Link from "next/link";
@@ -46,15 +47,28 @@ export const metadata: Metadata = {
 
 function NavLogo() {
   return (
-    <Link href="/" className="nav-logo">
-      <Image
-        src="/logo.png"
-        alt="Druidic Native Landscaping"
-        width={130}
-        height={52}
-        priority
-      />
-    </Link>
+
+    <div>
+      <Link href="/" className={styles.dark}>
+        <Image
+          src="/Dark_Mode_Logo.png"
+          alt="Druidic Native Landscaping"
+          width={130}
+          height={52}
+          priority
+        />
+      </Link>
+      <Link href="/" className={styles.light}>
+        <Image
+          src="/Light_Mode_Logo.png"
+          alt="Druidic Native Landscaping"
+          width={130}
+          height={52}
+          priority
+        />
+      </Link>
+    </div>
+    
   );
 }
 
@@ -80,11 +94,9 @@ const navLinksByRole: Record<RoleKey, { href: string; label: string }[]> = {
   ADMIN: [
     { href: "/admin/overview", label: "Overview" },
     { href: "/admin/leads", label: "Leads" },
-    { href: "/admin/teams", label: "Teams" },
-    { href: "/admin/reports", label: "Reports" },
-    { href: "/admin/settings", label: "Settings" },
-    { href: "/admin/scratch-html", label: "Scratch" },
-    { href: "/admin/customers", label: "Customers" },
+    { href: "/admin/hr", label: "HR" },
+    { href: "/admin/accounting", label: "Accounting" },
+    { href: "/admin/crm", label: "CRM" },
   ],
   GUEST: [
     { href: "/home", label: "Home" },

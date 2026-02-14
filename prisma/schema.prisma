@@ -1,15 +1,18 @@
+// prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  // NOTE: Per your setup, Prisma loads connection info via prisma.config.ts (not `url = env(...)`).
 }
 
 /**
+ * =========================================================
  * AUTH / IDENTITY
- * - User is for login + permissions
- * - Roles are DB-backed (flexible)
+ * =========================================================
  */
 
 model User {
@@ -17,7 +20,7 @@ model User {
   email        String     @unique
   passwordHash String?    // Argon2 hash (nullable for Google-only accounts)
   provider     String?    // "google" etc.
-  providerId   String?    
+  providerId   String?
   name         String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -25,6 +28,9 @@ model User {
   roles        UserRole[]
   customers    CustomerUser[]
   sessions     Session[]
+
+  // Accounting (who created a journal entry)
+  journalEntries JournalEntry[]
 
   @@index([email])
   @@unique([provider, providerId])
@@ -81,9 +87,9 @@ model UserRole {
 }
 
 /**
+ * =========================================================
  * BUSINESS ENTITIES
- * - Customer exists with or without a login
- * - CustomerUser links logins to business records (supports multiple household logins)
+ * =========================================================
  */
 
 enum CustomerStatus {
@@ -114,6 +120,9 @@ model Customer {
   projects    Project[]
   finances    Finance[]
 
+  // Accounting: optional linkage for reporting
+  journalEntries JournalEntry[]
+
   @@index([email])
   @@index([status])
 }
@@ -134,7 +143,9 @@ model CustomerUser {
 }
 
 /**
+ * =========================================================
  * OPERATIONS
+ * =========================================================
  */
 
 model Property {
@@ -148,6 +159,9 @@ model Property {
 
   files       File[]
   finances    Finance[]
+
+  // Accounting: optional linkage for reporting
+  journalEntries JournalEntry[]
 
   @@index([customerId])
 }
@@ -163,7 +177,10 @@ model Project {
 
   customer    Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId  String
-  finances   Finance[]
+  finances    Finance[]
+
+  // Accounting: optional linkage for reporting
+  journalEntries JournalEntry[]
 
   @@index([customerId])
 }
@@ -183,6 +200,9 @@ model Finance {
   property    Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
   propertyId  String?
 
+  // Accounting: optional linkage if you “post” Finance records to the ledger
+  journalEntry JournalEntry?
+
   @@index([customerId])
 }
 
@@ -201,24 +221,215 @@ model File {
   @@index([propertyId])
 }
 
-model JournalEntry {
-  id              String    @id @default(cuid())
-  title           String
-  debitAccountId  String
-  creditAccountId String
-  amount          Float
-  content         String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+/**
+ * =========================================================
+ * ACCOUNTING (CANNIBALIZED Account + JournalEntry)
+ *
+ * Pattern:
+ * - Accounts are app-managed (create from UI)
+ * - JournalEntry is the business event (append-only)
+ * - JournalLine are postings (double-entry: sum of lines = 0)
+ * - AccountBalance is an optional snapshot for instant “current status”
+ * =========================================================
+ */
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts        Account[]
+  journalEntries  JournalEntry[]
+  journalLines    JournalLine[] 
+  accountBalances AccountBalance[]
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum AccountSubtype {
+  // Assets
+  CASH
+  ACCOUNTS_RECEIVABLE
+  PREPAID_EXPENSES
+  INVENTORY
+  FIXED_ASSETS
+  ACCUMULATED_DEPRECIATION
+  OTHER_ASSET
+
+  // Liabilities
+  ACCOUNTS_PAYABLE
+  CREDIT_CARD
+  TAX_PAYABLE
+  PAYROLL_LIABILITY
+  LOANS_PAYABLE
+  DEFERRED_REVENUE
+  OTHER_LIABILITY
+
+  // Equity
+  OWNER_EQUITY
+  RETAINED_EARNINGS
+  OTHER_EQUITY
+
+  // Revenue
+  SERVICE_REVENUE
+  OTHER_REVENUE
+
+  // Expenses
+  COGS
+  PAYROLL_EXPENSE
+  RENT
+  UTILITIES
+  INSURANCE
+  FUEL
+  MAINTENANCE
+  MARKETING
+  SOFTWARE
+  MEALS
+  DEPRECIATION_EXPENSE
+  OTHER_EXPENSE
 }
 
 model Account {
-  id          String    @id @default(cuid())
-  name        String
-  balance     Float     @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String @id @default(cuid())
+
+  // Scope accounts to an organization (multi-tenant ready)
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  name      String
+  code      String? // optional but useful for imports/reporting
+  type      AccountType
+  subtype   AccountSubtype?
+  currency  String @default("USD")
+
+  // Rollups (optional)
+  parentId  String?
+  parent    Account?  @relation("AccountHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children  Account[] @relation("AccountHierarchy")
+
+  isActive  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lines     JournalLine[]
+  balance   AccountBalance?
+
+  @@unique([orgId, code])
+  @@index([orgId, type])
+  @@index([orgId, subtype])
+  @@index([parentId])
 }
+
+model JournalEntry {
+  id        String   @id @default(cuid())
+
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  // Accounting effective date
+  entryDate DateTime
+
+  title     String?
+  memo      String?
+  reference String? // invoice #, check #, external ref
+
+  // Optional: who created it
+  createdById String?
+  createdBy   User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  // Optional: link to business entities for reporting
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  projectId  String?
+  project    Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+
+  // Optional: link to Finance if you “post” a Finance record into the ledger
+  financeId  String? @unique
+  finance    Finance? @relation(fields: [financeId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lines     JournalLine[]
+
+  @@index([orgId, entryDate])
+  @@index([orgId, createdAt])
+  @@index([orgId, reference])
+  @@index([createdById])
+  @@index([customerId])
+  @@index([projectId])
+  @@index([propertyId])
+}
+
+model JournalLine {
+  id        String @id @default(cuid())
+
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  entryId   String
+  entry     JournalEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  /**
+   * Signed integer cents:
+   * - debit = positive
+   * - credit = negative
+   *
+   * With this convention:
+   * - an entry is balanced when SUM(lines.amountCents) = 0
+   * - an account balance is SUM(lines.amountCents) over time
+   */
+  amountCents BigInt
+
+  description String?
+  externalId  String? // plaid txn id / import id / etc
+
+  createdAt DateTime @default(now())
+
+  @@index([orgId, accountId])
+  @@index([orgId, entryId])
+  @@index([orgId, accountId, createdAt])
+  @@index([orgId, accountId, externalId])
+}
+
+model AccountBalance {
+  // 1:1 with Account
+  accountId String @id
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  // Signed cents, same convention as JournalLine.amountCents
+  balanceCents BigInt @default(0)
+
+  // Optional bookkeeping for debugging/invalidation
+  lastEntryId String?
+  updatedAt   DateTime @updatedAt
+
+  @@index([orgId])
+}
+
+/**
+ * =========================================================
+ * ANGI LEADS
+ * =========================================================
+ */
 
 model AngiLead {
   id        String   @id @default(cuid())
@@ -268,4 +479,6 @@ model AngiInterviewEntry {
 
   question  String
   answer    String
+
+  @@index([leadId])
 }

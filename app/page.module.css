@@ -30,12 +30,25 @@
   padding: 0.5rem;
 }
 
+.parent {
+  height: 100rem;
+}
+
 .homeImage {
   position: absolute;
   top: 0;
   left: 0;
   object-fit: cover;
+  object-position: top;
+  z-index: -1;
+  overflow: auto;
 }
+
+/* In your CSS module (e.g., ImageStyles.module.css) */
+.darkenedImage {
+  filter: brightness(50%); /* Adjust the percentage to your desired darkness */
+}
+
 
 @media (prefers-color-scheme: light) {
   .light { display: block; }
@@ -45,4 +58,23 @@
 @media (prefers-color-scheme: dark) {
   .light { display: none; }
   .dark { display: block; }
+}
+
+.homeContainer {
+  padding: 2rem;
+  width: 100vw;
+ 
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+}
+
+.contactButton {
+  color: #931f1d;
 }

@@ -1,0 +1,10 @@
+.cardGrid {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    gap: 1rem;
+}
+
+.card {
+    margin: auto;
+    text-align: center;
+}

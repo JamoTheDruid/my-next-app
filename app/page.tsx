@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import styles from "./page.module.css"
 import Image from "next/image"
 import Link from "next/link"
+import "./globals.css"
 
 export const metadata: Metadata = {
     title: "Druidic",
@@ -14,7 +15,7 @@ export default function HomePage() {
         
         <div className={styles.parent}>
             <Image 
-                src="/Home_Candidate.jpg" 
+                src="/Home_Light_C7.png" 
                 alt="Monarch Butterfly Feeding from a Swamp Milkweed" 
                 className={styles.homeImage + " " + styles.light} 
                 fill
@@ -22,15 +23,21 @@ export default function HomePage() {
                 priority
             />
             <Image 
-                src="/Home_Dark_C1.jpg" 
+                src="/Home_Dark_C2.png" 
                 alt="Moon Garden" 
-                className={styles.homeImage + " " + styles.dark} 
+                className={styles.homeImage + " " + styles.dark + " " + styles.darkenedImage} 
                 fill
                 sizes="100vw"
                 priority
             />
-            <div className={styles.intro}>This website is in development...</div>
 
+            <div className={`${styles.homeContainer}`}>
+                <div className={`liquidGlass newCard`}>
+                    <div className={styles.subtitle}>Why Native Landscapes?</div>
+                    <div className={styles.title}>Healthier environments that cost less to maintain</div>
+                    <Link href="/contact" className={styles.contactButton}>Contact Us</Link>
+                </div>
+            </div>
         </div>
     );
 }

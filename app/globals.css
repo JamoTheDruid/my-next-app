@@ -83,7 +83,7 @@ main {
 /* 🌓 Dark mode: automatically used when OS/browser is set to dark */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #020617;          /* very dark background */
+    --color-bg: #0f071c;          /* very dark background */
     --color-surface: #020617;     /* or #0b1120 for slightly lighter surface */
     --color-border: #1f2933;
     --color-text: #e5e7eb;
@@ -184,14 +184,32 @@ h6 { font-size: 1rem; } /* 15px */
   padding: 1.5rem;
 }
 
-.nav {
-  /*border-bottom: .25px solid var(--color-border);
+.newCard {
+  padding: 2rem;
+  border-radius: 1rem;
+  margin: 1rem;
+}
+
+.liquidGlass {
+  border-bottom: .25px solid var(--color-border);
   background-color: var(--color-surface);
-*/
+  background: color-mix(in srgb, var(--brand-purple) 4%, transparent) /*rgba(255, 255, 255, 0.2)*/;
+  backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, white 4%, transparent);
+  box-shadow:
+    0 10px 30px color-mix(in srgb, var(--brand-purple) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border-radius: 16px;
+}
+
+.nav {
+  border-bottom: .25px solid var(--color-border);
+  background-color: var(--color-surface);
+
   /* Core glass */
   background: color-mix(in srgb, var(--brand-purple) 4%, transparent);
-  -webkit-backdrop-filter: blur(30px) saturate(50%);
-  backdrop-filter: blur(30px) saturate(50%);
+  -webkit-backdrop-filter: blur(10px) saturate(100%);
+  backdrop-filter: blur(10px) saturate(100%);
 
   /* Edge + depth */
   border: 1px solid color-mix(in srgb, white 4%, transparent);
